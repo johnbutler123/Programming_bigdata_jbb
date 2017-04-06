@@ -1,0 +1,234 @@
+#####John Butler - Student Number 10353776 - Programming for Big Data - Assignment 1 - 26032017
+
+####Overview of files
+##calculatorclass.py shows the contents of the Calculator object.
+##It contains menu options and all the functions required to perform 10 standard calculator functions
+##It also conatins functions designed to ensure that the user enters valid inputs
+##Where appropriate outputs are rounded to 4 decimal places eg for divide function to ensure 10/3 does not return 3.3333333333333333 etc
+
+##calculatorapp.py shows the contents of the calculator application itself.
+##it provides an interface with user allowing users to select menu options
+##it calls on functions within calculatorclass.py to produce output
+
+##testind_calculator.py contains testcode based on unittest framework for each of the 10 calculation functions
+##it calls on functions within calculatorclass.py to test that actual results are as expected
+## it is named testind_calculator.py as the tests are on functions that do not require direct user input
+
+##testind_calculator.py contains testcode based on unittest framework.
+##it calls on functions within calculatorclass.py to test that actual results are as expected
+##it performs tests on the 10 calculation functions and on the 4 functions that require user input
+##These 4 functions are get_valid_choice, getpositivefloat, getpositivefloat and getfloatint
+##The rationale for showing this file separately is becuase it requires test user input it runs slower that testind_calculator.py
+##No requirement to perform test on calculate_result function as this function simply calls other functions which have already been tested
+##Also did not perform test on lists contained with functions because the successful testing of the function implies that lists are ok
+
+
+
+
+
+
+
+import os
+import math
+os. system('cls') 
+ 
+
+
+
+
+
+
+class Calculator(object):
+
+
+    def show_menu(self):
+        print '--------------------------------------------------------------------------------'
+        print "This is a calculator with 10 functions - please choose a function to continue\n"
+        print "\tTo add two numbers select '1'"
+        print "\tTo subtract two numbers select '2'"
+        print "\tTo multiply two numbers select '3'"
+        print "\tTo divide two numbers select '4'"
+        print "\tTo calculate the sine of an angle select '5'"
+        print "\tTo calculate the cosine of an angle select '6'"
+        print "\tTo calculate the tan of an angle select '7'"
+        print "\tTo calculate the square root of a number select '8'"
+        print "\tTo calculate the square of a number select '9'"
+        print "\tTo calculate the factorial of a number select '10'\n"
+        print '--------------------------------------------------------------------------------'	
+
+    def add(self,a,b):
+        sum = a + b
+        return sum
+
+    def subtract(self,a,b):
+        difference = a - b
+        return difference
+
+
+    def multiply(self,a,b):
+        product = a * b
+        return product
+
+
+    def divide(self,a,b):
+        if b == 0:
+            division = 'Dividing by zero has no meaning'
+        else:
+            division = round(a / float(b),4)
+        return division
+
+    def calculate_sin(self,d):
+        sin = round(math.sin(math.radians(d)),4)
+        return sin
+
+    def calculate_cos(self,d):
+        cos = round(math.cos(math.radians(d)),4)
+        return cos
+
+# unique characteristic of tan function is that tan 90 and tan multiple of 90 are undefined
+# unless the multiple of 90 is also a mutltiple of 180 in which cnase value 0 is returned
+    def calculate_tan(self,n):
+        if n % 180 == 0:
+            tan = 0
+        elif n % 90 == 0:
+            tan = "Undefined"
+        else:
+            tan = round(math.tan(math.radians(n)),4)
+        return tan
+
+
+    def calculate_square(self,n):
+        square = n * n
+	return square
+
+
+
+    def calculate_sqroot(self,n):
+	sqroot = round(math.sqrt(n),4)
+	return sqroot
+
+    def calculate_exponential(self,n):
+	exp = math.exp(n)
+	return exp
+
+    def calculate_factorial(self,n):
+        if n == 0 or n == 1:
+            f = 1
+        else:
+            f = n
+            while n > 1:  
+                f = f * (n-1)
+                n = n-1
+        return f
+
+
+#This function forces the user to enter a valid menu option
+    def get_valid_choice(self,prompt):
+        choice_list = ['1','2','3','4','5','6','7','8','9','10']
+        while True:
+            choice = raw_input(prompt)
+            if choice in choice_list:
+                return choice
+                break
+            else:
+                print "You did not enter a valid choice please try again\n"
+                
+
+#This function forces the user to enter a number which is capable of being converted into a positive float
+    def getpositivefloat(self,prompt):
+        while True:
+            try:
+                s_input = raw_input(prompt)
+                f_input = float(s_input)
+            except:
+                print "You did not enter a valid input please try again\n"
+            else:
+                if f_input >= 0:
+                    return f_input
+                    break
+                else:
+                    print "You did not enter a positive number - please try again\n"
+
+#This function forces the user to enter a number which is capable of being converted into a positive integer                    
+    def getpositiveint(self,prompt):
+        while True:
+            try:
+                s_input = raw_input(prompt)
+                i_input = int(s_input)
+            except:
+                print "You did not enter a valid input - please try again\n"
+            else:
+                if i_input >= 0:
+                    return i_input
+                    break
+                else:
+                    print "Integer must be greater than or equal to zero - please try again\n"
+
+#This function forces the user to enter a number which is capable of being converted into a positive float                    
+    def getfloatinput(self,prompt):
+	while True:
+	    try:
+                s_input = raw_input(prompt)
+		f_input = float(s_input)
+		return f_input
+		break
+            except:
+                print 'You did not enter a valid input - please try again\n'
+
+#This function uses the output of above functions to produce result
+    def calculate_result(self,c):
+	opdict = {1:"+", 2:"-", 3:"*", 4:"/", 5:"Sine", 6:"Cosine", 7:"Tan", 8:"Square Root", 9:"Square", 10:"Factorial"}
+        first = "Please enter first number\n"
+        second = "\n\nPlease enter second number\n"
+        number = "Please enter number\n"
+        positive = "Please enter positive number\n"
+	posint = "Please enter positive integer\n"
+        degree = "Please enter degrees\n"
+        os. system('cls') 
+        if c == '1':
+            num1 = self.getfloatinput(first)
+            num2 = self.getfloatinput(second)
+            result = self.add(num1,num2)
+            return "{} {} {} = {}".format(num1,opdict.get(1, "none"),num2,result)		
+        if c == '2':
+            num1 = self.getfloatinput(first)
+            num2 = self.getfloatinput(second)
+            result = self.subtract(num1,num2)
+            return "{} {} {} = {}".format(num1,opdict.get(2, "none"),num2,result)
+        if c == '3':
+            num1 = self.getfloatinput(first)
+            num2 = self.getfloatinput(second)
+            result = self.multiply(num1,num2)
+            return "{} {} {} = {}".format(num1,opdict.get(3, "none"),num2,result)
+        if c == '4':
+            num1 = self.getfloatinput(first)
+            num2 = self.getfloatinput(second)
+            result = self.divide(num1,num2)
+            return "{} {} {} = {}".format(num1,opdict.get(4, "none"),num2,result)
+        if c == '5':  #Check if float is valid
+            num = self.getfloatinput(degree)
+            result = self.calculate_sin(num)
+            return "{} {} = {}".format(opdict.get(5, "none"),num,result)
+        if c == '6':  #Check if float is valid
+            num = self.getfloatinput(degree)
+            result = self.calculate_cos(num)
+            return "{} {} = {}".format(opdict.get(6, "none"),num,result)
+        if c == '7':  #Check if float is valid
+            num = self.getfloatinput(degree)
+            result = self.calculate_tan(num)
+            return "{} {} = {}".format(opdict.get(7, "none"),num,result)
+        if c == '8':
+            num = self.getpositivefloat(positive)
+            result = self.calculate_sqroot(num)
+            return "{} of {} is + {} or - {}".format(opdict.get(8, "none"),num,result,result)
+        if c == '9':
+            num = self.getfloatinput(number)
+            result = self.calculate_square(num)
+            return "The {} of {} = {}".format(opdict.get(9, "none"),num,result)
+        if c == '10':
+            num = self.getpositiveint(posint)
+            result = self.calculate_factorial(num)
+            return "{} {} is {}".format(num, opdict.get(10, "none"),result)
+
+
+

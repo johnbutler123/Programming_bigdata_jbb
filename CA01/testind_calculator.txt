@@ -1,0 +1,214 @@
+#####John Butler - Student Number 10353776 - Programming for Big Data - Assignment 1 - 26032017
+
+####Overview of files
+##calculatorclass.py shows the contents of the Calculator object.
+##It contains menu options and all the functions required to perform 10 standard calculator functions
+##It also conatins functions designed to ensure that the user enters valid inputs
+##Where appropriate outputs are rounded to 4 decimal places eg for divide function to ensure 10/3 does not return 3.3333333333333333 etc
+
+##calculatorapp.py shows the contents of the calculator application itself.
+##it provides an interface with user allowing users to select menu options
+##it calls on functions within calculatorclass.py to produce output
+
+##testind_calculator.py contains testcode based on unittest framework for each of the 10 calculation functions
+##it calls on functions within calculatorclass.py to test that actual results are as expected
+## it is named testind_calculator.py as the tests are on functions that do not require direct user input
+
+##testind_calculator.py contains testcode based on unittest framework.
+##it calls on functions within calculatorclass.py to test that actual results are as expected
+##it performs tests on the 10 calculation functions and on the 4 functions that require user input
+##These 4 functions are get_valid_choice, getpositivefloat, getpositivefloat and getfloatint
+##The rationale for showing this file separately is becuase it requires test user input it runs slower that testind_calculator.py
+##No requirement to perform test on calculate_result function as this function simply calls other functions which have already been tested
+##Also did not perform test on lists contained with functions because the successful testing of the function implies that lists are ok
+
+import unittest
+from calculatorclass import Calculator
+
+class TestCalculator(unittest.TestCase):
+
+    def setUp(self):
+        self.calc = Calculator()
+
+        
+    # this tests the add functionality
+    # 2 + 2 = 4
+    # 2 + 4 = 6
+    # 2 + (-2) = 0
+    def test_calculator_add_method_returns_correct_result(self):
+        result = self.calc.add(2, 2)
+        self.assertEqual(4, result)
+        result = self.calc.add(2,4)
+        self.assertEqual(6, result)
+        result = self.calc.add(2, -2)
+        self.assertEqual(0, result)
+
+        
+    # this test the subtract functionality
+    # 10 - 1 = 9
+    # 3 - 3 = 0
+    # 1 - 10 = -9    
+    def testsubtract(self):
+        result = self.calc.subtract(10,1)
+        self.assertEqual(result,9)
+        result = self.calc.subtract(3,3)
+        self.assertEqual(result,0)
+        result = self.calc.subtract(1,10)
+        self.assertEqual(result,-9)
+
+        
+    # this tests the multiply functionality
+    # -10 * -1 = 10
+    # 3 * 3 = 9
+    # 0 * 10 = 0
+    def testmultiply(self):
+        result = self.calc.multiply(-10,-1)
+        self.assertEqual(result,10)
+        result = self.calc.multiply(3,3)
+        self.assertEqual(result,9)
+        result = self.calc.multiply(0,10)
+        self.assertEqual(result,0)
+
+        
+    # this tests the divide functionality
+    # 10 / 0 has no meaning
+    # 10 / -3 = -3.333 - becuase calculator rounds to 4 decimal places
+    # 0 / 6 = 0
+    # -24 / 2 = -12
+    # 2 / -4 = -0.5
+    def testdivide(self):
+        result = self.calc.divide(10,0)
+        self.assertEqual(result,'Dividing by zero has no meaning')
+        result = self.calc.divide(10,-3)
+        self.assertEqual(result,-3.3333)
+        result = self.calc.divide(0,6)
+        self.assertEqual(result,0)
+        result = self.calc.divide(-24,2)
+        self.assertEqual(result,-12)         
+        result = self.calc.divide(2,-4)
+        self.assertEqual(result,-0.5)
+
+        
+    # this test the sine functionality - input is in degrees
+    # sine 1 = 0.0175 (rounded to 4 decimal places)
+    # sine 0 = 0
+    # sine 30 = 0.5
+    # sine -30 = -0.5
+    # sine -360 = 0
+    def testsine(self):
+        result = self.calc.calculate_sin(1)
+        self.assertEqual(result,0.0175)     
+        result = self.calc.calculate_sin(0)
+        self.assertEqual(result,0) 
+        result = self.calc.calculate_sin(30)
+        self.assertEqual(result,0.5)
+        result = self.calc.calculate_sin(-30)
+        self.assertEqual(result,-.5)
+        result = self.calc.calculate_sin(-360)
+        self.assertEqual(result,0)
+
+        
+    # this tests the cosine functionality - input is in degrees
+    # cos 3 = 0.9986 (rounded to 4 decimal places)
+    # cos 0 = 1
+    # cos 60 = 0.5
+    # cos 120 = -0.5
+    # cos -360 = 1
+    def testcos(self):
+        result = self.calc.calculate_cos(3)
+        self.assertEqual(result,0.9986)    
+        result = self.calc.calculate_cos(0)
+        self.assertEqual(result,1) 
+        result = self.calc.calculate_cos(60)
+        self.assertEqual(result,0.5)
+        result = self.calc.calculate_cos(120)
+        self.assertEqual(result,-0.5)
+        result = self.calc.calculate_cos(-360)
+        self.assertEqual(result,1)
+
+        
+    # this tests the tan functionality
+    # Note tan 90 returns an error as does tan of any multiple of 90 unless it is also a multiple of 180 in which case 0 is returned
+    # tan 4 = 0.699 (rounded to 4 decimal places)
+    # tan 0 = 0
+    # tan 90 is undefined
+    # tan 180 = 0 
+    # tan 270 is undefined
+    # tan -270 is undefined
+    # tan 45 = 1
+    def testtan(self):
+        result = self.calc.calculate_tan(4)
+        self.assertEqual(result,.0699)     
+        result = self.calc.calculate_tan(0)
+        self.assertEqual(result,0) 
+        result = self.calc.calculate_tan(90)
+        self.assertEqual(result,"Undefined")
+        result = self.calc.calculate_tan(180)
+        self.assertEqual(result,0)
+        result = self.calc.calculate_tan(270)
+        self.assertEqual(result,"Undefined")
+        result = self.calc.calculate_tan(-270)
+        self.assertEqual(result,"Undefined")
+        result = self.calc.calculate_tan(45)
+        self.assertEqual(result,1)
+
+        
+    # this tests the square root functionality
+    # It is impossible to obtain the square root of an negative number
+    # However the square root function is designed not to allow negative numbers so no need to test this
+    # Also the aquare root fucntion recognises that there is a postive and negative square root for each number
+    # Becuase the negative result is always the postive result * -1 the test only checks the positive value
+    # absolute value of square root of 7 is 2.6458 (rounded to 4 decimal places)
+    # absolute value of square root of 0 is 0
+    # absolute value of square root of 100 is 10
+    def testsqrt(self):
+        result = self.calc.calculate_sqroot(7)
+        self.assertEqual(result,2.6458) 
+        result = self.calc.calculate_sqroot(0)
+        self.assertEqual(result,0) 
+        result = self.calc.calculate_sqroot(100)
+        self.assertEqual(result,10)
+
+        
+    # this tests the square functionality    
+    # 10.567 squared = 111.661489
+    # 0 squared = 0
+    # -4 squared = 16
+    def testsquare(self):
+        result = self.calc.calculate_square(10.567)
+        self.assertEqual(result,111.661489) 
+        result = self.calc.calculate_square(0)
+        self.assertEqual(result,0) 
+        result = self.calc.calculate_square(-4)        
+        self.assertEqual(result,16)
+
+        
+    # this tests the factorial functionality
+    # factorials are only available on positive integers
+    # However the factorial function is designed to only accept positive integers therefore no requirement to test for anything else
+    # 0 factorial = 1
+    # 1 factorial = 1
+    # 4 factorial = 24
+    # 12 factorial = 479001600
+    def testfactorial(self):
+        result = self.calc.calculate_factorial(0)
+        self.assertEqual(result,1) 
+        result = self.calc.calculate_factorial(1)
+        self.assertEqual(result,1) 
+        result = self.calc.calculate_factorial(4)
+        self.assertEqual(result,24)
+        result = self.calc.calculate_factorial(12)
+        self.assertEqual(result,479001600)
+        
+      
+        
+        
+
+
+
+
+    
+
+
+if __name__ == '__main__':
+    unittest.main()
