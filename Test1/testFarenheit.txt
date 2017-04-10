@@ -1,0 +1,25 @@
+#Handling Inputs
+minim = None
+maxim = None
+
+while True:
+    try:
+        s_input = raw_input('Please enter numbers and when finished enter done\n')
+        input = float(s_input)
+# Do computation
+        if minim == None or input < minim:
+            minim = input
+        if maxim == None or input > maxim:
+            maxim = input
+
+    except:
+    
+# Handling Output
+        if s_input == 'done':
+            print 'Minimum = {}, Maximum = {}'.format(minim,maxim)
+            break
+            
+# Handling errors
+        else:
+            print 'You did not enter a valid number'
+            continue
