@@ -20,14 +20,23 @@ def max(values):
 #### 3. Return minimum value from list using reduce
 def min(values):
 	return reduce(lambda a,b: a if (a<b) else b, values)
+    
+print "Minimum of numbers in list = ", min([47, 11, 42, 13])
 
 #### 4. Return sum of values in list using reduce
 def add(values):
 	return reduce(lambda a,b: a+b, values)
-
+    
+def addd(a,b):
+    return a + b
+    
+x = reduce(addd,([47, 11, 42, 12]))
+print "formulaa", x
 #### 5. Return value obtained by subtracting consecutive values in list from value of first item - using reduce
 def sub(values):
 	return reduce(lambda a,b: a-b, values)
+    
+
 
 #### 6. Return product of values in a list - using reduce
 def mul(values):
